@@ -10,14 +10,14 @@ const Login = () => {
                     <img src="https://images.unsplash.com/photo-1415369629372-26f2fe60c467?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687" alt="Perro" className='login-image' />
                 </div>
                 <div className='overlay'></div>
-            </div>
 
-            <div className="login-text">
-                <h2>Mantén a tu mejor amigo seguro.</h2>
-                <p>
-                    Nuestra plataforma te ayuda a localizar y gestionar el bienestar de tu mascota
-                    dentro de la comunidad, todo en un solo lugar.
-                </p>
+                <div className="login-text">
+                    <h2>Mantén a tu mejor amigo seguro.</h2>
+                    <p>
+                        Nuestra plataforma te ayuda a localizar y gestionar el bienestar de tu mascota
+                        dentro de la comunidad, todo en un solo lugar.
+                    </p>
+                </div>
             </div>
 
             {/* Segunda mitad Login */}
@@ -32,7 +32,7 @@ const Login = () => {
 
                     {/* Heading */}
                     <h1>Bienvenido de Nuevo</h1>
-                    <p>Inicia sesión en tu cuenta para continuar</p>
+                    <p className="subtitle">Inicia sesión en tu cuenta para continuar</p>
 
                     {/* Email Field */}
                     <div className="email-field">
