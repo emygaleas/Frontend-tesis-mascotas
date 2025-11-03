@@ -1,0 +1,12 @@
+/* --- ESTRUCTURA PRINCIPAL --- */
+.login-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background-color: #ffffff;
+}
+
+/* --- MITAD IZQUIERDA (IMAGEN) --- */
+.login-left {
+    
+}
