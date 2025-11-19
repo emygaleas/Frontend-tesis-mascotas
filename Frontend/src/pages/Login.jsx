@@ -93,7 +93,7 @@ const Login = () => {
             </form>
 
             <div className="mt-6 text-sm text-center">
-              <Link to="/n" className="text-primary font-semibold hover:text-primary/80 transition">¿Olvidaste tu contraseña?</Link>
+              <Link to="/forgot/id" className="text-primary font-semibold hover:text-primary/80 transition">¿Olvidaste tu contraseña?</Link>
             </div>
 
             <div className="mt-6 text-center text-sm text-gray-600">
