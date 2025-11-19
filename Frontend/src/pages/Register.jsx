@@ -1,5 +1,13 @@
 import { useState } from "react";
-import {MdVisibility, MdVisibilityOff, MdEmail, MdLock, MdPerson, MdHome, MdPhone} from "react-icons/md";
+import {
+  MdVisibility,
+  MdVisibilityOff,
+  MdEmail,
+  MdLock,
+  MdPerson,
+  MdHome,
+  MdPhone,
+} from "react-icons/md";
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { useFetch } from "../hooks/useFetch";
@@ -15,7 +23,7 @@ export const Register = () => {
   const fetchDataBackend = useFetch();
 
   const registerUser = async (dataForm) => {
-    const url = `${import.meta.env.VITE_BACKEND_URL}/register`;
+    const url = `${import.meta.env.VITE_BACKEND_URL}/owner/registro`;
     await fetchDataBackend(url, dataForm, "POST");
   };
 
@@ -41,7 +49,12 @@ export const Register = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
           Volver al Inicio
         </Link>
@@ -74,7 +87,10 @@ export const Register = () => {
           </div>
 
           {/* Formulario */}
-          <form onSubmit={handleSubmit(registerUser)} className="flex flex-col gap-6">
+          <form
+            onSubmit={handleSubmit(registerUser)}
+            className="flex flex-col gap-6"
+          >
             {/* Información del Dueño */}
             <div>
               <h3 className="mb-4 text-lg font-bold text-gray-800 border-b border-gray-500 pb-2">
@@ -86,29 +102,55 @@ export const Register = () => {
                 <label className="flex flex-col">
                   <p className="text-sm font-medium pb-2">Nombre</p>
                   <div className="relative">
-                    <MdPerson className="absolute left-4 top-3 text-[#b19671ff]" size={22} />
+                    <MdPerson
+                      className="absolute left-4 top-3 text-[#b19671ff]"
+                      size={22}
+                    />
                     <input
                       type="text"
                       placeholder="Ingresa tu nombre"
                       className="w-full rounded-lg border border-gray-400 bg-white/80 h-12 pl-12 pr-4 text-gray-800"
-                      {...register("nombre", { required: "El nombre es obligatorio" })}
+                      {...register("nombre", {
+                        required: "El nombre es obligatorio",
+                        pattern: {
+                          value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
+                          message: "El nombre solo puede contener letras",
+                        },
+                      })}
                     />
                   </div>
-                  {errors.nombre && <p className="text-red-700 text-sm">{errors.nombre.message}</p>}
+                  {errors.nombre && (
+                    <p className="text-red-700 text-sm">
+                      {errors.nombre.message}
+                    </p>
+                  )}
                 </label>
 
                 <label className="flex flex-col">
                   <p className="text-sm font-medium pb-2">Apellido</p>
                   <div className="relative">
-                    <MdPerson className="absolute left-4 top-3 text-[#b19671ff]" size={22} />
+                    <MdPerson
+                      className="absolute left-4 top-3 text-[#b19671ff]"
+                      size={22}
+                    />
                     <input
                       type="text"
                       placeholder="Ingresa tu apellido"
                       className="w-full rounded-lg border border-gray-400 bg-white/80 h-12 pl-12 pr-4 text-gray-800"
-                      {...register("apellido", { required: "El apellido es obligatorio" })}
+                      {...register("apellido", {
+                        required: "El apellido es obligatorio",
+                        pattern: {
+                          value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
+                          message: "El apellido solo puede contener letras",
+                        },
+                      })}
                     />
                   </div>
-                  {errors.apellido && <p className="text-red-700 text-sm">{errors.apellido.message}</p>}
+                  {errors.apellido && (
+                    <p className="text-red-700 text-sm">
+                      {errors.apellido.message}
+                    </p>
+                  )}
                 </label>
               </div>
 
@@ -117,16 +159,27 @@ export const Register = () => {
                 <label className="flex flex-col">
                   <p className="text-sm font-medium pb-2">Dirección</p>
                   <div className="relative">
-                    <MdHome className="absolute left-4 top-3 text-[#b19671ff]" size={22} />
+                    <MdHome
+                      className="absolute left-4 top-3 text-[#b19671ff]"
+                      size={22}
+                    />
                     <input
                       type="text"
                       placeholder="Ingresa tu dirección de domicilio"
                       className="w-full rounded-lg border border-gray-400 bg-white/80 h-12 pl-12 pr-4 text-gray-800"
-                      {...register("direccion", { required: "La dirección es obligatoria" })}
+                      {...register("direccion", {
+                        required: "La dirección es obligatoria",
+                        minLength: {
+                          value: 5,
+                          message: "Debe tener al menos 5 caracteres",
+                        },
+                      })}
                     />
                   </div>
                   {errors.direccion && (
-                    <p className="text-red-700 text-sm">{errors.direccion.message}</p>
+                    <p className="text-red-700 text-sm">
+                      {errors.direccion.message}
+                    </p>
                   )}
                 </label>
               </div>
@@ -136,42 +189,77 @@ export const Register = () => {
                 <label className="flex flex-col">
                   <p className="text-sm font-medium pb-2">Celular</p>
                   <div className="relative">
-                    <MdPhone className="absolute left-4 top-3 text-[#b19671ff]" size={22} />
+                    <MdPhone
+                      className="absolute left-4 top-3 text-[#b19671ff]"
+                      size={22}
+                    />
                     <input
                       type="text"
                       placeholder="Ingresa tu celular"
                       className="w-full rounded-lg border border-gray-400 bg-white/80 h-12 pl-12 pr-4 text-gray-800"
-                      {...register("celular", { required: "El celular es obligatorio" })}
+                      {...register("celular", {
+                        required: "El celular es obligatorio",
+                        pattern: {
+                          value: /^[0-9]{10}$/,
+                          message: "Debe tener 10 dígitos numéricos",
+                        },
+                      })}
                     />
                   </div>
-                  {errors.celular && <p className="text-red-700 text-sm">{errors.celular.message}</p>}
+                  {errors.celular && (
+                    <p className="text-red-700 text-sm">
+                      {errors.celular.message}
+                    </p>
+                  )}
                 </label>
 
                 <label className="flex flex-col">
-                  <p className="text-sm font-medium pb-2">Correo Electrónico</p>
+                  <p className="text-sm font-medium pb-2">
+                    Correo Electrónico
+                  </p>
                   <div className="relative">
-                    <MdEmail className="absolute left-4 top-3 text-[#b19671ff]" size={22} />
+                    <MdEmail
+                      className="absolute left-4 top-3 text-[#b19671ff]"
+                      size={22}
+                    />
                     <input
                       type="email"
                       placeholder="Ingresa tu correo"
                       className="w-full rounded-lg border border-gray-400 bg-white/80 h-12 pl-12 pr-4 text-gray-800"
-                      {...register("email", { required: "El correo es obligatorio" })}
+                      {...register("email", {
+                        required: "El correo es obligatorio",
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: "Formato de correo no válido",
+                        },
+                      })}
                     />
                   </div>
-                  {errors.email && <p className="text-red-700 text-sm">{errors.email.message}</p>}
+                  {errors.email && (
+                    <p className="text-red-700 text-sm">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </label>
 
                 <label className="flex flex-col">
-                  <p className="text-sm font-medium pb-2">Fecha de Nacimiento</p>
+                  <p className="text-sm font-medium pb-2">
+                    Fecha de Nacimiento
+                  </p>
                   <input
                     type="date"
                     className="rounded-lg border border-gray-400 bg-white/80 h-12 px-4 text-gray-800"
                     {...register("fechaNacimiento", {
                       required: "La fecha de nacimiento es obligatoria",
+                      validate: (value) =>
+                        new Date(value) < new Date() ||
+                        "La fecha no puede ser futura",
                     })}
                   />
                   {errors.fechaNacimiento && (
-                    <p className="text-red-700 text-sm">{errors.fechaNacimiento.message}</p>
+                    <p className="text-red-700 text-sm">
+                      {errors.fechaNacimiento.message}
+                    </p>
                   )}
                 </label>
               </div>
@@ -181,27 +269,50 @@ export const Register = () => {
                 <label className="flex flex-col">
                   <p className="text-sm font-medium pb-2">Contraseña</p>
                   <div className="relative">
-                    <MdLock className="absolute left-4 top-3 text-[#b19671ff]" size={22} />
+                    <MdLock
+                      className="absolute left-4 top-3 text-[#b19671ff]"
+                      size={22}
+                    />
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="************"
                       className="w-full rounded-lg border border-gray-400 bg-white/80 h-12 pl-12 pr-10 text-gray-800"
-                      {...register("password", { required: "La contraseña es obligatoria" })}
+                      {...register("password", {
+                        required: "La contraseña es obligatoria",
+                        minLength: {
+                          value: 8,
+                          message: "Debe tener al menos 8 caracteres",
+                        },
+                        pattern: {
+                          value:
+                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+                          message:
+                            "Debe incluir mayúscula, minúscula y número",
+                        },
+                      })}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-3 text-gray-600 hover:text-gray-800"
                     >
-                      {showPassword ? <MdVisibilityOff size={20} /> : <MdVisibility size={20} />}
+                      {showPassword ? (
+                        <MdVisibilityOff size={20} />
+                      ) : (
+                        <MdVisibility size={20} />
+                      )}
                     </button>
                   </div>
-                  {errors.password && <p className="text-red-700 text-sm">{errors.password.message}</p>}
+                  {errors.password && (
+                    <p className="text-red-700 text-sm">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </label>
               </div>
             </div>
 
-            {/* Botón de acción */}
+            {/* Botón */}
             <div className="flex flex-col items-center gap-4 pt-4">
               <button
                 type="submit"
@@ -211,7 +322,10 @@ export const Register = () => {
               </button>
               <p className="text-center text-sm text-gray-800">
                 ¿Ya tienes una cuenta?{" "}
-                <Link to="/login" className="font-bold text-[#b19671ff]/90 hover:text-[#b19671ff]">
+                <Link
+                  to="/login"
+                  className="font-bold text-[#b19671ff]/90 hover:text-[#b19671ff]"
+                >
                   Inicia sesión
                 </Link>
               </p>

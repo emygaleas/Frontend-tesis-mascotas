@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { useFetch } from "../hooks/useFetch";
-import { Heart } from "lucide-react";
+import { DogFact } from "../pages/dashboard/DogFact";
+import { AvatarStyles } from "../pages/dashboard/Avatar";
 
 export const Dashboard = () => {
   const location = useLocation();
@@ -9,8 +10,6 @@ export const Dashboard = () => {
   const fetchDataBackend = useFetch();
 
   const [usuario, setUsuario] = useState(null);
-  const [avatars, setAvatars] = useState([]);
-  const [dogFacts, setDogFacts] = useState([]);
 
   // Traer datos del usuario al montar el Dashboard
   useEffect(() => {
@@ -28,37 +27,6 @@ export const Dashboard = () => {
     };
     obtenerUsuario();
   }, []);
-
-  // Traer avatars
-    useEffect(() => {
-    const obtenerAvatars = async () => {
-        const data = await fetchDataBackend("http://localhost:3000/api/avatar/get-all", null, "GET");
-        console.log("Avatars obtenidos:", data);
-        if (data) setAvatars(Array.isArray(data) ? data : [data]);
-    };
-    obtenerAvatars();
-    }, []);
-
-  // Traer dog facts
-        useEffect(() => {
-        const obtenerDogFacts = async () => {
-            try {
-            const data = await fetchDataBackend(
-                "http://localhost:3000/api/dogs/random-fact",
-                null,
-                "GET"
-            );
-
-            // Convertimos objeto en array para map
-            if (data) setDogFacts([data]);
-            } catch (error) {
-            console.error("Error al obtener dog facts:", error);
-            setDogFacts([]);
-            }
-        };
-
-        obtenerDogFacts();
-        }, []);
 
 
   const links = [
@@ -91,11 +59,10 @@ export const Dashboard = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition ${
-                  urlActual === link.to
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition ${urlActual === link.to
                     ? "bg-[#f7f2b0] text-black shadow"
                     : "text-gray-600 hover:bg-black-100"
-                }`}
+                  }`}
               >
                 <span className="text-lg">{link.icon}</span>
                 {link.name}
@@ -137,77 +104,18 @@ export const Dashboard = () => {
         <main className="flex-1 overflow-y-auto p-6">
 
           {/* Sección de APIs */}
-          
-            {/* Avatares Section */}
-            <section>
+
+          {/* Avatares Section */}
+          <section>
             <div className="mb-6">
-                <h2 className="text-2xl font-bold text-foreground mb-2">Avatares disponibles</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-2">Avatares disponibles</h2>
             </div>
 
-            {avatars.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {avatars.map((avatar, i) => (
-                    <div
-                    key={i}
-                    className="group bg-white rounded-2xl p-6 shadow-sm border border-black/10 hover:shadow-lg hover:border-black/30 transition-all cursor-pointer"
-                    >
-                    <div className="">
-                        <img
-                        src={avatar.url || "https://cdn-icons-png.flaticon.com/512/616/616408.png"}
-                        alt={`Avatar ${i + 1}`}
-                        className="w-full h-full object-cover rounded-lg"
-                        />
-                    </div>
-                    <p className="font-semibold text-foreground text-center">
-                        {avatar.name || `Avatar ${i + 1}`}
-                    </p>
-                    </div>
-                ))}
-                </div>
-            ) : (
-                <div className="text-center py-12 bg-white rounded-2xl border-2 border-dashed border-black/20">
-                <Heart className="w-12 h-12 text-black/30 mx-auto mb-3" />
-                <p className="text-foreground/60">No hay avatares disponibles</p>
-                </div>
-            )}
-            </section>
+            <AvatarStyles/>
+          </section>
 
-    {/* Dog Facts Section */}
-    <section>
-    <div className="mt-6 mb-6">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Dato del día</h2>
-        <p className="text-foreground/60">
-        Aprende algo nuevo sobre los perros cada día
-        </p>
-    </div>
-
-    {dogFacts.length > 0 ? (
-        <div className="space-y-4">
-        {dogFacts.map((fact, i) => (
-            <div
-            key={i}
-            className="bg-white border border-gray-200 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow"
-            >
-            <div className="flex gap-4">
-                <div className="text-3xl flex-shrink-0">🐕</div>
-                <div className="flex-1">
-                <p className="text-lg text-foreground leading-relaxed">
-                    {fact.fact_es ? fact.fact_es : fact.fact_en}
-                </p>
-                </div>
-            </div>
-            </div>
-        ))}
-        </div>
-    ) : (
-        <div className="text-center py-12 bg-white rounded-2xl border-2 border-dashed border-black/20">
-        <Heart className="w-12 h-12 text-black/30 mx-auto mb-3" />
-        <p className="text-foreground/60">No hay datos disponibles en este momento</p>
-        </div>
-    )}
-    </section>
-
-
+          {/* Dog Facts Section */}
+          <DogFact/>
           <Outlet />
         </main>
 
