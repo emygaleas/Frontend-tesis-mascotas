@@ -1,33 +1,22 @@
-import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router";
-import { useFetch } from "../hooks/useFetch";
 import { DogFact } from "../pages/dashboard/DogFact";
 import { AvatarStyles } from "../pages/dashboard/Avatar";
+
+// Rutas privadas del dashboard
+import storeAuth from "../context/storeAuth"
+
+// Traer información del usuario
+import storeProfile from "../context/storeProfile";
 
 export const Dashboard = () => {
   const location = useLocation();
   const urlActual = location.pathname;
-  const fetchDataBackend = useFetch();
 
-  const [usuario, setUsuario] = useState(null);
+  // Boton salir
+  const {clearToken} = storeAuth();
 
-  // Traer datos del usuario al montar el Dashboard
-  useEffect(() => {
-    const obtenerUsuario = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const data = await fetchDataBackend(
-        "http://localhost:3000/api/perfil",
-        null,
-        "GET",
-        { Authorization: `Bearer ${token}` }
-      );
-      if (data) setUsuario(data);
-    };
-    obtenerUsuario();
-  }, []);
-
+  // Información del usuario
+  const { user } = storeProfile();
 
   const links = [
     { to: "/dashboard", name: "Inicio", icon: "🏠" },
@@ -42,15 +31,17 @@ export const Dashboard = () => {
 
           <div className="flex flex-col items-center mt-6">
             <img
-              src={usuario?.foto || "https://cdn-icons-png.flaticon.com/128/2335/2335114.png"}
+              src={user?.foto || "https://cdn-icons-png.flaticon.com/128/2335/2335114.png"}
               alt="Usuario"
               className="w-20 h-20 rounded-full border-2 border-[#675b4c] p-1"
             />
+            {/* Nombre de usuario */}
             <p className="text-gray-600 mt-3 text-sm">
-              Bienvenido, <span className="font-semibold">{usuario?.nombre || "Usuario"}</span>
+              Bienvenido, <span className="font-semibold">{user?.nombre || "Usuario"}</span>
             </p>
+            {/* Rol de usuario */}
             <p className="text-gray-400 text-xs">
-              Rol: {usuario?.rol || "Residente"}
+              Rol: {user?.rol || "Residente"}
             </p>
           </div>
 
@@ -70,11 +61,13 @@ export const Dashboard = () => {
             ))}
           </nav>
         </div>
-
+        
+        {/* Boton salir */}
         <div className="p-4 border-t border-gray-200">
           <Link
             to="/"
             className="flex items-center justify-center gap-2 bg-[#674c4c] hover:bg-red-700 text-white py-2 rounded-lg font-semibold text-sm"
+            onClick={() => clearToken()}
           >
             🚪 Cerrar sesión
           </Link>
@@ -94,7 +87,7 @@ export const Dashboard = () => {
               <span className="text-2xl">🔔</span>
             </button>
             <img
-              src={usuario?.foto || "https://cdn-icons-png.flaticon.com/512/4715/4715329.png"}
+              src={user?.foto || "https://cdn-icons-png.flaticon.com/512/4715/4715329.png"}
               alt="Avatar"
               className="w-10 h-10 rounded-full border-2 border-green-500"
             />
