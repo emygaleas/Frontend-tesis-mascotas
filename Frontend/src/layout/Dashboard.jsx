@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router";
-import { DogFact } from "../pages/dashboard/DogFact";
-import { AvatarStyles } from "../pages/dashboard/Avatar";
+import { DogFact } from "../pages/dashboard/DogFact.jsx";
+import { AvatarStyles } from "../pages/dashboard/Avatar.jsx";
 
 // Rutas privadas del dashboard
 import storeAuth from "../context/storeAuth"
