@@ -18,7 +18,7 @@ export const Confirm = () => {
           setLoading(false);
           return;
         }
-        const url = `${import.meta.env.VITE_BACKEND_URL}/auth/confirm-email/${token}`;
+        const url = `${import.meta.env.VITE_BACKEND_URL}/confirm-email/${token}`;
         const response = await fetchDataBackend(url);
         if (response) {
           setIsConfirmed(true);
