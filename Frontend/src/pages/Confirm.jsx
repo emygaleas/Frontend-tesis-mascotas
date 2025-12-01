@@ -1,40 +1,120 @@
-import logoDog from '../assets/dog-hand.webp'
-import {Link, useParams} from 'react-router'
-
-import { useFetch } from '../hooks/useFetch'
-import { useEffect } from 'react'
-import { ToastContainer } from 'react-toastify'
-
+import { useState, useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
+import { useFetch } from "../hooks/useFetch";
+import { FaCheckCircle } from "react-icons/fa";
 
 export const Confirm = () => {
+  const fetchDataBackend = useFetch();
+  const { token } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
-    const fetchDataBackend = useFetch()
-    const {token} = useParams() // Permite capturar el token
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        if (!token) {
+          setLoading(false);
+          return;
+        }
+        const url = `${import.meta.env.VITE_BACKEND_URL}/auth/confirm-email/${token}`;
+        const response = await fetchDataBackend(url);
+        if (response) {
+          setIsConfirmed(true);
+          toast.success("¡Cuenta confirmada exitosamente!");
+        }
+      } catch (error) {
+        console.error("Error al confirmar:", error);
+        toast.error("No se pudo confirmar tu cuenta. Intenta de nuevo.");
+        setTimeout(() => navigate("/"), 2000);
+      } finally {
+        setLoading(false);
+      }
+    };
+    verifyToken();
+  }, [token, navigate]);
 
-    const verifyToken = async()=>{
-        const url = `${import.meta.env.VITE_BACKEND_URL}/confirmar/${token}`
-        await fetchDataBackend(url)
-    }
-
-    // Se usan efectos secundarios, ya que al dar click en confirmar cuenta, por detrás se ejecuta (con useEffect)
-    useEffect(() => {
-        verifyToken()
-    })
-
+  if (loading) {
     return (
-        
-        <div className="flex flex-col items-center justify-center h-screen">
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: "#fff7e0" }}
+      >
+        <p className="text-lg text-gray-500">Confirmando tu cuenta...</p>
+      </div>
+    );
+  }
 
-            <ToastContainer />
-
-            <img className="object-cover h-80 w-80 rounded-full border-4 border-solid border-slate-600" src={logoDog} alt="image description"/>
-
-            <div className="flex flex-col items-center justify-center">
-                <p className="text-3xl md:text-4xl lg:text-5xl text-gray-800 mt-12">Muchas Gracias</p>
-                <p className="md:text-lg lg:text-xl text-gray-600 mt-8">Ya puedes iniciar sesión</p>
-                <Link to="/login" className="p-3 m-5 w-full text-center bg-gray-600 text-slate-300 border rounded-xl hover:scale-110 duration-300 hover:bg-gray-900 hover:text-white">Login</Link>
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center py-12 px-4"
+      style={{ backgroundColor: "#fff7e0" }}
+    >
+      <ToastContainer />
+      <div className="w-full max-w-lg">
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="p-8 text-center">
+            <div className="mb-6 flex justify-center">
+              <FaCheckCircle
+                size={80}
+                style={{ color: "#b19671ff" }}
+                className="animate-bounce"
+              />
             </div>
 
+            <h1 className="text-4xl font-bold" style={{ color: "#b19671ff" }}>
+              PETCONNECT
+            </h1>
+
+            {isConfirmed ? (
+              <>
+                <h2 className="text-2xl font-bold mt-6">¡Bienvenido a PetConnect!</h2>
+                <p className="text-gray-500 mt-4">
+                  Tu cuenta ha sido confirmada exitosamente. Ya puedes iniciar sesión y comenzar
+                  a disfrutar de todas las funcionalidades.
+                </p>
+
+                <div className="mt-8 space-y-3">
+                  <Link
+                    to="/login"
+                    className="block w-full text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all text-center"
+                    style={{ backgroundColor: "#b19671ff" }}
+                  >
+                    Iniciar Sesión
+                  </Link>
+
+                  <Link
+                    to="/"
+                    className="block w-full text-gray-700 py-3 rounded-lg font-bold hover:bg-gray-100 transition-all text-center border-2 border-gray-300"
+                  >
+                    Volver al Inicio
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-2xl font-bold mt-6">Confirmación Fallida</h2>
+                <p className="text-gray-500 mt-4">
+                  No pudimos confirmar tu cuenta. El enlace puede haber expirado o ser inválido.
+                </p>
+
+                <div className="mt-8">
+                  <Link
+                    to="/"
+                    className="block w-full text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all text-center"
+                    style={{ backgroundColor: "#b19671ff" }}
+                  >
+                    Volver al Inicio
+                  </Link>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
+
+export default Confirm;

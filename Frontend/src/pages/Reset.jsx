@@ -19,7 +19,7 @@ const Reset = () => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/recuperarpassword/${token}`;
+        const url = `${import.meta.env.VITE_BACKEND_URL}/restore-password/${token}`;
         await fetchDataBackend(url, null, "GET");
         setTokenValid(true);
       } catch (error) {
@@ -40,7 +40,7 @@ const Reset = () => {
 
     setLoading(true);
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/nuevopassword/${token}`;
+      const url = `${import.meta.env.VITE_BACKEND_URL}/change-password/${token}`;
       const response = await fetchDataBackend(url, { password: dataForm.password }, "POST");
       
       if (response) {

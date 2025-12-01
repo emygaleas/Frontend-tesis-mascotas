@@ -1,6 +1,7 @@
 import { Link } from "react-router"
 import { FaMapMarkerAlt, FaUsers, FaAppleAlt, FaBriefcase, FaQuoteLeft, FaHeart } from "react-icons/fa"
 import { Mail, Phone, MapPin, Heart } from "lucide-react";
+import { DogFact } from "../pages/Dashboard/DogFact.jsx";
 
 export const Home = () => {
   return (
@@ -121,6 +122,31 @@ export const Home = () => {
           />
         </div>
       </section>
+
+      {/* API DOG FACTS */}
+      {/* DOG FACT – Dato Curioso del Día */}
+      <section className="px-6 py-20 bg-[#fffaf4]">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl font-extrabold text-gray-800 mb-6">
+            🐶 Dato Curioso del Día
+          </h2>
+
+          <div
+            className="p-6 rounded-xl shadow-md mx-auto text-lg font-medium leading-relaxed"
+            style={{
+              background: "linear-gradient(135deg, #f6dcbf, #fff7e0)",
+              border: "1px solid rgba(0,0,0,0.07)"
+            }}
+          >
+            <DogFact />
+          </div>
+
+          <p className="mt-4 text-sm text-gray-600">
+            Cada día aprenderás algo nuevo sobre nuestros amigos peludos. 💛
+          </p>
+        </div>
+      </section>
+
 
       {/* TESTIMONIOS */}
       <section id="nosotros" className="py-20 px-6 bg-gray-50 text-gray-800">

@@ -23,7 +23,7 @@ export const Register = () => {
   const fetchDataBackend = useFetch();
 
   const registerUser = async (dataForm) => {
-    const url = `${import.meta.env.VITE_BACKEND_URL}/owner/registro`;
+    const url = `${import.meta.env.VITE_BACKEND_URL}/auth/sign-up`;
     await fetchDataBackend(url, dataForm, "POST");
   };
 
@@ -248,6 +248,8 @@ export const Register = () => {
                   </p>
                   <input
                     type="date"
+                    min="1900-01-01"
+                    max={new Date().toISOString().split("T")[0]}
                     className="rounded-lg border border-gray-400 bg-white/80 h-12 px-4 text-gray-800"
                     {...register("fechaNacimiento", {
                       required: "La fecha de nacimiento es obligatoria",

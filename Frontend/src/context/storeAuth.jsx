@@ -12,7 +12,7 @@ const storeAuth = create(
             // Funcion token: recibo el token y automaticamente lo setea
             setToken: (token) => set({token}),
             setRol: (rol) => set ({rol}),
-            clearToken: () => set ({ token: null }) // Para cuando el usuario cierre sesión
+            clearToken: () => set ({ token: null, rol: null }), // Para cuando el usuario cierre sesión
         }),
         {name: 'auth-token'} // En auth-token se almacenará la información
     )

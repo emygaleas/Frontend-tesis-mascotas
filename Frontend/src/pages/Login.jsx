@@ -1,42 +1,71 @@
 import { useState } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router"; // <- CORRECTO: react-router-dom
 import { toast, ToastContainer } from "react-toastify";
 
+import { useFetch } from "../hooks/useFetch";
+import { useForm } from "react-hook-form";
+
+import storeAuth from "../context/storeAuth";
+
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const fetchDataBackend = useFetch();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-    // 🔹 Validaciones frontend
-    if (!email || !password) {
-      return toast.error("Debes llenar todos los campos");
+  // Auth store (asegúrate que storeAuth expone setToken y setRol)
+  const { setToken, setRol } = storeAuth();
+
+  // loginUser más defensivo
+  const loginUser = async (dataForm) => {
+    try {
+      const url = `${import.meta.env.VITE_BACKEND_URL}/auth/login`;
+      console.log("Enviando login a:", url, "con:", dataForm);
+
+      const response = await fetchDataBackend(url, dataForm, "POST");
+      console.log("Respuesta fetchDataBackend:", response);
+
+      if (!response) {
+        toast.error("No se recibió respuesta del servidor");
+        return;
+      }
+
+      // Verifica existencia de token antes de usarlo
+      if (!response.token) {
+        toast.error(response?.msg || "Credenciales inválidas");
+        return;
+      }
+
+      // Guardar token/rol en el store (y opcionalmente en localStorage dentro del store)
+      setToken(response.token);
+      if (response.rol) setRol(response.rol);
+
+      toast.success("Inicio de sesión exitoso");
+      // Pequeño delay para que el user vea el toast y no parezca que "no pasó nada"
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 600);
+    } catch (error) {
+      console.error("Error en loginUser:", error);
+      toast.error("Error al iniciar sesión");
     }
+  };
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return toast.error("Ingresa un correo válido");
-    }
-
-    if (password.length < 6) {
-      return toast.error("La contraseña debe tener al menos 6 caracteres");
-    }
-
-    // 🔹 Simulación de login exitoso
-    toast.success("¡Login exitoso!");
-    localStorage.setItem("token", "mock-token"); // guardamos un token falso
-    navigate("/dashboard");
+  // onSubmit defensivo: evita recarga aunque algo raro pase
+  const onSubmitPrevent = (e) => {
+    e.preventDefault(); // fuerza prevenir la recarga
+    // Ejecuta el handler de react-hook-form (que validará y hará loginUser)
+    return handleSubmit(loginUser)(e);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4" style={{ backgroundColor: "#fff7e0" }}>
       <ToastContainer />
       <div className="w-full max-w-lg">
-        <Link to="/" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold mb-6 transition">
+        <Link to="/" className="inline-flex items-center gap-2 text-primary font-semibold mb-6 transition">
           ← Volver al Inicio
         </Link>
 
@@ -49,17 +78,22 @@ const Login = () => {
           </div>
 
           <div className="p-8">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* aquí uso onSubmitPrevent para asegurar preventDefault */}
+            <form className="space-y-6" onSubmit={onSubmitPrevent}>
+
               {/* Email */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Correo Electrónico</label>
                 <input
                   type="email"
                   placeholder="tu@correo.com"
-                  className="w-full pl-4 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent border-gray-300"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-4 pr-4 py-3 border rounded-lg border-gray-300"
+                  {...register("email", {
+                    required: "El correo es obligatorio",
+                    pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Email inválido" }
+                  })}
                 />
+                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
               </div>
 
               {/* Password */}
@@ -69,10 +103,11 @@ const Login = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    className="w-full pl-4 pr-12 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent border-gray-300"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full pl-4 pr-12 py-3 border rounded-lg border-gray-300"
+                    {...register("password", { required: "La contraseña es obligatoria" })}
                   />
+                  {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -85,7 +120,7 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="block w-full text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all text-center"
+                className="block w-full text-white py-3 rounded-lg font-bold"
                 style={{ backgroundColor: "#b19671ff" }}
               >
                 Iniciar Sesión
@@ -93,7 +128,9 @@ const Login = () => {
             </form>
 
             <div className="mt-6 text-sm text-center">
-              <Link to="/forgot/id" className="text-primary font-semibold hover:text-primary/80 transition">¿Olvidaste tu contraseña?</Link>
+              <Link to="/forgot/id" className="text-primary font-semibold hover:text-primary/80 transition">
+                ¿Olvidaste tu contraseña?
+              </Link>
             </div>
 
             <div className="mt-6 text-center text-sm text-gray-600">
