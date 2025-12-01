@@ -19,7 +19,7 @@ const Reset = () => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/restore-password/${token}`;
+        const url = `${import.meta.env.VITE_BACKEND_URL}/auth/restore-password/${token}`;
         await fetchDataBackend(url, null, "GET");
         setTokenValid(true);
       } catch (error) {
@@ -40,8 +40,8 @@ const Reset = () => {
 
     setLoading(true);
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/change-password/${token}`;
-      const response = await fetchDataBackend(url, { password: dataForm.password }, "POST");
+      const url = `${import.meta.env.VITE_BACKEND_URL}/auth/change-password/${token}`;
+      const response = await fetchDataBackend(url, { password: dataForm.password, confirmPassword: dataForm.confirmpassword }, "POST");
       
       if (response) {
         toast.success("¡Contraseña actualizada exitosamente!");
