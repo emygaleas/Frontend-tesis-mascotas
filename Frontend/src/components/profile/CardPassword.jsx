@@ -37,7 +37,7 @@ const CardPassword = () => {
                             type="password"
                             placeholder="Ingresa tu contraseña actual"
                             className="block w-full rounded-md border border-[#DBCDBF] bg-white py-2 px-3 text-[#7A6A58] mb-5"
-                            {...register('passwordactual', { required: true })}
+                            {...register('passwordactual', { required: "Por favor ingresa tu contraseña actual" })}
                         />
                         {errors.passwordactual && <p className="text-red-500 text-sm mb-4">La contraseña actual es obligatoria</p>}
                     </div>
@@ -50,7 +50,19 @@ const CardPassword = () => {
                             type="password"
                             placeholder="Ingresa la nueva contraseña"
                             className="block w-full rounded-md border border-[#DBCDBF] bg-white py-2 px-3 text-[#7A6A58] mb-5"
-                            {...register('passwordnuevo', { required: true })}
+                            {...register('passwordnuevo', {
+                                required: "Por favor ingresa una nueva contraseña",
+                                minLength: {
+                                value: 8,
+                                message: "Debe tener al menos 8 caracteres",
+                                },
+                                pattern: {
+                                value:
+                                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+                                message:
+                                    "Debe incluir mayúscula, minúscula y número",
+                                },
+                             })}
                         />
                         {errors.passwordnuevo && <p className="text-red-500 text-sm mb-4">La nueva contraseña es obligatoria</p>}
                     </div>
