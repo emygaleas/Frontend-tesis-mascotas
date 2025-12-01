@@ -18,7 +18,7 @@ export const Confirm = () => {
           setLoading(false);
           return;
         }
-        const url = `${import.meta.env.VITE_BACKEND_URL}/confirm-email/${token}`;
+        const url = `${import.meta.env.VITE_BACKEND_URL}/confirm/${token}`;
         const response = await fetchDataBackend(url);
         if (response) {
           setIsConfirmed(true);
@@ -94,7 +94,7 @@ export const Confirm = () => {
               </>
             ) : (
               <>
-                <h2 className="text-2xl font-bold mt-6">¡Bienvenido a PetConnect!</h2>
+                <h2 className="text-2xl font-bold mt-6">Confirmación Fallida</h2>
                 <p className="text-gray-500 mt-4">
                   Tu cuenta ha sido confirmada exitosamente. Ya puedes iniciar sesión y comenzar
                   a disfrutar de todas las funcionalidades.
