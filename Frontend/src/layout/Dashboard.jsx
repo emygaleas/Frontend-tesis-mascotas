@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router";
-import { AvatarStyles } from "../pages/Dashboard/Avatar.jsx";
+import { NavLink } from "react-router";
 
 // Rutas privadas
 import storeAuth from "../context/storeAuth";
@@ -37,11 +37,11 @@ const Dashboard = () => {
             />
 
             <p className="text-gray-600 mt-3 text-sm">
-              Bienvenido,{" "}
-              <span className="font-semibold">{user?.nombre || "Usuario"}</span>
+              <span className="font-semibold"></span>
+              Bienvenido - {user?.nombre || "Usuario"}
             </p>
 
-            <p className="text-gray-400 text-xs">Rol: {user?.rol || "Invitado"}</p>
+            <p className="text-gray-400 text-xs">Rol: {user?.rol || "Residente"}</p>
           </div>
 
           {/* MENU */}
@@ -73,7 +73,20 @@ const Dashboard = () => {
               Perfil
             </Link>
 
-            {/* LISTAR */}
+            {/* AVATARES */}
+            <Link
+              to="/dashboard/avatars"
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition ${
+                urlActual === "/dashboard/avatars"
+                  ? "bg-[#f7f2b0] text-black shadow"
+                  : "text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <span className="text-lg">🖼️</span>
+              Avatares
+            </Link>
+
+            {/* LISTAR 
             <Link
               to="/dashboard/list"
               className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition ${
@@ -85,8 +98,9 @@ const Dashboard = () => {
               <span className="text-lg">📄</span>
               Listar
             </Link>
+            */}
 
-            {/* CREAR */}
+            {/* CREAR
             <Link
               to="/dashboard/create"
               className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition ${
@@ -98,8 +112,9 @@ const Dashboard = () => {
               <span className="text-lg">➕</span>
               Crear
             </Link>
+             */}
 
-            {/* CHAT */}
+            {/* CHAT 
             <Link
               to="/dashboard/chat"
               className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition ${
@@ -111,6 +126,7 @@ const Dashboard = () => {
               <span className="text-lg">💬</span>
               Chat
             </Link>
+            */}
 
           </nav>
         </div>
@@ -147,11 +163,13 @@ const Dashboard = () => {
               : ""}
           </h1>
 
+          {/*
           <div className="flex items-center gap-4">
             <button className="relative text-2xl">
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
               🔔
             </button>
+            
             <img
               src={
                 user?.foto ||
@@ -160,17 +178,13 @@ const Dashboard = () => {
               alt="Avatar"
               className="w-10 h-10 rounded-full border-2 border-green-500"
             />
+            
           </div>
+          */}
         </header>
 
         {/* CONTENIDO */}
         <main className="flex-1 overflow-y-auto p-6 space-y-10">
-          <section>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">
-              Avatares disponibles
-            </h2>
-            <AvatarStyles />
-          </section>
           <Outlet />
         </main>
 

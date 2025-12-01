@@ -4,13 +4,11 @@ import {toast} from 'react-toastify'
 
 // Vamos a obtener el token desde localStorage
 const getAuthHeaders = () => {
-    const stored = JSON.parse(localStorage.getItem("auth-token"))
+    const storedUser = JSON.parse(localStorage.getItem("auth-token"))
     return {
         headers: {
             "Content-Type": "application/json",
-            Authorization: stored?.token 
-                ? `Bearer ${stored.token}`
-                : "",
+            Authorization: `Bearer ${storedUser?.state?.token}`,
         },
     }
 }
@@ -24,7 +22,7 @@ const storeProfile = create((set) => ({
     // Petición
     profile: async () => {
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/perfil`
+            const url = `${import.meta.env.VITE_BACKEND_URL}/auth/perfil`
 
             console.log("TOKEN ENVIADO:" , getAuthHeaders());
             const respuesta = await axios.get(url, getAuthHeaders())

@@ -7,6 +7,7 @@ import { Confirm } from './pages/Confirm'
 import { NotFound } from './pages/NotFound'
 import Dashboard from './layout/Dashboard'
 import Profile from './pages/Profile'
+import Avatars from './pages/Avatars'
 import List from './pages/List'
 import Details from './pages/Details'
 import Create from './pages/Create'
@@ -62,6 +63,7 @@ function App() {
                 <Route path='create' element={<Create/>}/>
                 <Route path='update/:id' element={<Update/>}/>
                 <Route path='chat' element={<Chat/>}/>
+                <Route path='avatars' element={<Avatars/>}/>
               </Route>
             </Routes>
           </ProtectedRoute>
