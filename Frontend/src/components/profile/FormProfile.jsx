@@ -71,7 +71,7 @@ const FormProfile = () => {
                     type="text"
                     placeholder="Ingresa tu teléfono"
                     className="block w-full rounded-md border border-[#DBCDBF] bg-white py-2 px-3 text-[#7A6A58] mb-5"
-                    {...register("celular", { required: "El celular es obligatorio" })}
+                    {...register("celular", { required: "El celular es obligatorio", pattern: { value: /^[0-9]+$/, message: "Solo se permiten números" }, minLength: { value: 10, message: "Mínimo 10 dígitos" }})}
                 />
                 {errors.celular && <p className="text-red-800">{errors.celular.message}</p>}
             </div>
