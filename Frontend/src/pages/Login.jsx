@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { Link, useNavigate } from "react-router"; // <- CORRECTO: react-router-dom
+import { Link, useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 
 import { useFetch } from "../hooks/useFetch";
@@ -16,7 +16,7 @@ const Login = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  // Auth store (asegúrate que storeAuth expone setToken y setRol)
+  // Auth store
   const { setToken, setRol } = storeAuth();
 
   // loginUser más defensivo
