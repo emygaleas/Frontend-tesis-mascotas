@@ -25,6 +25,7 @@ const Reset = () => {
       } catch (error) {
         toast.error("El enlace de recuperación ha expirado o es inválido");
         setTimeout(() => navigate("/login"), 2000);
+        console.log(error);
       } finally {
         setLoading(false);
       }
@@ -51,6 +52,7 @@ const Reset = () => {
       }
     } catch (error) {
       toast.error("Error al actualizar la contraseña. Intenta de nuevo.");
+      console.log(error);
     } finally {
       setLoading(false);
     }

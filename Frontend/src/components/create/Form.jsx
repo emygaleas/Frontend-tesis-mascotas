@@ -110,6 +110,8 @@ export const Form = () => {
                         <input
                             type="radio"
                             value="ia"
+                            checked={selectedOption === "ia"}
+                            onChange={() => setSelectedOption("ia")}
                         />
                         Generar con IA
                     </label>
@@ -119,6 +121,8 @@ export const Form = () => {
                         <input
                             type="radio"
                             value="upload"
+                            checked={selectedOption === "upload"}
+                            onChange={() => setSelectedOption("upload")}
                         />
                         Subir Imagen
                     </label>
